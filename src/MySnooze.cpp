@@ -219,7 +219,7 @@ static
 int8_t mySleep( uint32_t ms )
 {
   	int8_t why;
-	// Disable interrupts until going to sleep, otherwise interrupts occurring between attachInterrupt()
+	// Disable interrupts until going to sleep, otherwise interrupts occurring between here
 	// and sleep might cause the ATMega to not wakeup from sleep as interrupt has already be handled!
 	cli();
   	wokeUpWhy = 0;
@@ -249,7 +249,10 @@ int8_t mySleep( uint32_t ms )
  * 
  * @param sleepingMS  sleep time in milliseconds, or 0 for 'forever'
  * @param smartSleep  if true, notify gateway before going to sleep
- * @return int8_t     reason for return from sleep, value returned by tick() or MY_WAKE_UP_BY_TIMER
+ * @return int8_t     reason for return from sleep, 
+ *                    value returned by tick(),
+ *                    or MY_WAKE_UP_BY_TIMER,
+ *                    or MY_SLEEP_NOT_POSSIBLE
  */
 int8_t snooze(const uint32_t sleepingMS, const bool smartSleep)
 {

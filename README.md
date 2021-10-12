@@ -14,11 +14,12 @@ It has the same signature and same basic behavior as the original MySensors `sle
 |-------     | ---------------------  | ------------------------ |
 | `millis()` function | not corrected for sleep duration | reasonably correct after sleep |
 | ADC state | always ON after sleep | restored to pre-sleep state |
-| code execution during sleep | none | periodic function call every 8s
+| code execution during "sleep" | none | periodic function call every 8s |
+| interrupts | uses Arduino `attachInterrupt()` and `detachInterrupt()`, defines own ISR | can use any ISR, communication via global variable
 
 Sleeping for a defined time uses the watchdog timer, both in the original and in my library. If you request sleep for 30 minutes, the processor actually wakes up every 8s, and then goes back to sleep. 
 
-In my library, a function `int8_t tick(void)` is called every 8s, you implement that function, it can only do simple things like polling a pin. No UART actions and no A/D conversions, please. The return value of the function indicates whether sleep should continue (==0), or or end now (!=0).
+The `snooze()` function calls a function `int8_t tick(void)` every 8s, you implement that function, it can only do simple things like polling a pin. No UART actions and no A/D conversions, please. The return value of the function indicates whether sleep should continue (==0), or end now (!=0).
 
 If you don't implement that function, nothing gets called.
 
